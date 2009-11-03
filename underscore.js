@@ -17,14 +17,20 @@
   var previousUnderscore = root._;
   
   // Create a safe reference to the Underscore object for the functions below.
-  var _ = root._ = {};
+  var _ = root._ = function(obj) {
+    var ret = {};
+    for (var key in _) if (Object.prototype.hasOwnProperty.call(_, key)) {
+      ret[key] = _.bind(_[key], this, obj);
+    }
+    return ret;
+  };
   
   // Export the Underscore object for CommonJS.
   if (typeof exports !== 'undefined') _ = exports;
   
   // Current version.
   _.VERSION = '0.3.3';
-      
+  
   /*------------------------ Collection Functions: ---------------------------*/
     
   // The cornerstone, an each implementation.
